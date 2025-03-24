@@ -29,8 +29,8 @@ app.post('/api/waiting-list', async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    if (error.code === 11000) {
-      res.status(400).json({ error: 'Email already registered' });
+    if (emailAlreadyExists) {
+      return res.status(409).json({ message: 'Email already registered' })
     } else {
       console.error('Error:', error);
       res.status(500).json({ error: 'Internal server error' });

@@ -24,7 +24,7 @@ export function WaitingListDialog({ children, variant }) {
       setName('')
       setEmail('')
     } catch (error) {
-      if (error.message === 'Email already registered') {
+      if (error.response && error.response.status === 409) {
         toast.error('This email is already registered')
       } else {
         toast.error('Something went wrong. Please try again.')
@@ -43,10 +43,11 @@ export function WaitingListDialog({ children, variant }) {
       <Dialog.Trigger asChild>
         {children || <Button variant={variant}>Get Started</Button>}
       </Dialog.Trigger>
-      
+
       <AnimatePresence>
         {open && (
           <Dialog.Portal forceMount>
+            {/* Overlay */}
             <Dialog.Overlay asChild>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -55,13 +56,14 @@ export function WaitingListDialog({ children, variant }) {
                 className="fixed inset-0 bg-black/50 z-50"
               />
             </Dialog.Overlay>
-            
+
+            {/* Dialog Content */}
             <Dialog.Content asChild>
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-50 w-full max-w-md bg-background rounded-lg shadow-lg p-6"
+                className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-50 w-[90%] max-w-md bg-background rounded-lg shadow-lg p-6 max-h-[90vh] overflow-y-auto"
               >
                 {submitted ? (
                   <div className="text-center">
@@ -78,7 +80,7 @@ export function WaitingListDialog({ children, variant }) {
                     <Dialog.Title className="text-2xl font-bold mb-4">
                       Join the Waiting List
                     </Dialog.Title>
-                    
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -93,7 +95,7 @@ export function WaitingListDialog({ children, variant }) {
                           required
                         />
                       </div>
-                      
+
                       <div>
                         <label htmlFor="email" className="block text-sm font-medium mb-1">
                           Email
@@ -107,14 +109,15 @@ export function WaitingListDialog({ children, variant }) {
                           required
                         />
                       </div>
-                      
+
                       <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? 'Joining...' : 'Join Waiting List'}
                       </Button>
                     </form>
                   </>
                 )}
-                
+
+                {/* Close Button */}
                 <Dialog.Close asChild>
                   <button
                     className="absolute top-4 right-4 text-gray-400 hover:text-gray-500"

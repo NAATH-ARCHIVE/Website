@@ -3,17 +3,17 @@ import { motion } from "framer-motion"
 const testimonials = [
   {
     quote: "Naath Archive has helped us preserve our community's stories for future generations.",
-    author: "Sarah Johnson",
+    author: "Nyaneg Gatluak",
     role: "Community Leader"
   },
   {
     quote: "An incredible platform that makes cultural preservation accessible to everyone.",
-    author: "Michael Chen",
+    author: "Pual Bayoch",
     role: "Heritage Curator"
   },
   {
     quote: "The collaborative features have brought our community closer together.",
-    author: "Aisha Patel",
+    author: "Buay Reath",
     role: "Cultural Researcher"
   }
 ]
