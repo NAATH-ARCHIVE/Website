@@ -2,9 +2,9 @@ import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from './ui/button'
+import { X } from 'lucide-react'
 import { addToWaitingList } from '../lib/api'
 import toast from 'react-hot-toast'
-import { X } from 'lucide-react'
 
 export function WaitingListDialog({ children, variant }) {
   const [open, setOpen] = useState(false)
@@ -41,7 +41,7 @@ export function WaitingListDialog({ children, variant }) {
       if (!isOpen) setSubmitted(false)
     }}>
       <Dialog.Trigger asChild>
-        {children || <Button variant={variant}>Get Started</Button>}
+        {children || <Button variant={variant}>Join Waiting List</Button>}
       </Dialog.Trigger>
 
       <AnimatePresence>
@@ -57,75 +57,81 @@ export function WaitingListDialog({ children, variant }) {
               />
             </Dialog.Overlay>
 
-            {/* Dialog Content */}
+            {/* Content */}
             <Dialog.Content asChild>
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-50 w-[90%] max-w-md bg-background rounded-lg shadow-lg p-6 max-h-[90vh] overflow-y-auto"
+                className="fixed inset-0 z-50 flex items-center justify-center"
               >
-                {submitted ? (
-                  <div className="text-center">
-                    <Dialog.Title className="text-2xl font-bold mb-4">
-                      Thank You!
-                    </Dialog.Title>
-                    <p className="mb-4">Thanks for joining our waiting list. We will keep you updated!</p>
-                    <Button onClick={() => setOpen(false)} className="w-full">
-                      Close
-                    </Button>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden w-full max-w-md mx-4 relative">
+                  <div className="p-6 h-full overflow-y-auto">
+                    {submitted ? (
+                      <div className="text-center">
+                        <Dialog.Title className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                          Thank You!
+                        </Dialog.Title>
+                        <p className="mb-4 text-gray-700 dark:text-gray-300">
+                          Thanks for joining our waiting list. We will keep you updated!
+                        </p>
+                        <Button onClick={() => setOpen(false)} className="w-full">
+                          Close
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <Dialog.Title className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                          Join the Waiting List
+                        </Dialog.Title>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                          <div>
+                            <label htmlFor="name" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
+                              Name
+                            </label>
+                            <input
+                              id="name"
+                              type="text"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              className="w-full px-3 py-2 rounded-md border border-input dark:bg-gray-700 dark:text-gray-100"
+                              required
+                            />
+                          </div>
+
+                          <div>
+                            <label htmlFor="email" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
+                              Email
+                            </label>
+                            <input
+                              id="email"
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className="w-full px-3 py-2 rounded-md border border-input dark:bg-gray-700 dark:text-gray-100"
+                              required
+                            />
+                          </div>
+
+                          <Button type="submit" className="w-full" disabled={loading}>
+                            {loading ? 'Joining...' : 'Join Waiting List'}
+                          </Button>
+                        </form>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <>
-                    <Dialog.Title className="text-2xl font-bold mb-4">
-                      Join the Waiting List
-                    </Dialog.Title>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium mb-1">
-                          Name
-                        </label>
-                        <input
-                          id="name"
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="w-full px-3 py-2 rounded-md border border-input"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium mb-1">
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full px-3 py-2 rounded-md border border-input"
-                          required
-                        />
-                      </div>
-
-                      <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? 'Joining...' : 'Join Waiting List'}
-                      </Button>
-                    </form>
-                  </>
-                )}
-
-                {/* Close Button */}
-                <Dialog.Close asChild>
-                  <button
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
-                    aria-label="Close"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </Dialog.Close>
+                  {/* Close Button */}
+                  <Dialog.Close asChild>
+                    <button
+                      className="absolute top-4 right-4 text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-400"
+                      aria-label="Close"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </Dialog.Close>
+                </div>
               </motion.div>
             </Dialog.Content>
           </Dialog.Portal>
